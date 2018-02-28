@@ -4,7 +4,7 @@ title:  "elasticdump"
 date:   2018-02-28 15:14:54
 categories: elasticsearch
 tags: elasticsearch
-excerpt: Elasticsearch index data를 퍼나라자
+excerpt: Elasticsearch index data를 퍼나르자.
 mathjax: true
 ---
 
