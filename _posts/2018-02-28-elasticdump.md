@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "elasticdump"
-date:   2015-02-10 15:14:54
+date:   2018-02-28 15:14:54
 categories: elasticsearch
 tags: elasticsearch
 excerpt: Elasticsearch index data를 퍼나라자
