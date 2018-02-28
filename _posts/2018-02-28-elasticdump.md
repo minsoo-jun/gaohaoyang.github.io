@@ -17,8 +17,11 @@ Created by Minsoo jun, last modified on 2017-07-19
 아파치 로그를 저장하고 있던 Elasticsearch서버를 새로운 클러스터로 이전할 필요가 있어서 어떻게 할까 고민하다가 두가지 안이 생각났습니다.
 * 로그스타쉬([Logstash](https://www.elastic.co/products/logstash))을 이용해서 하는 방법
     * 로그스타쉬의 [input](https://www.elastic.co/guide/en/logstash/current/plugins-inputs-elasticsearch.html)을 원본 elasticsearch로 잡고 [filter](https://www.elastic.co/guide/en/logstash/6.2/filter-plugins.html)에서 필요한 처리를 한후 [output](https://www.elastic.co/guide/en/logstash/current/plugins-outputs-elasticsearch.html)으로 새로운 클러스터로 보내기
+
 ![logstash](https://www.elastic.co/assets/blt8a9ac25aedbd9ca7/logstash-img1.png)
+
 * elasticdump을 이용해서 인덱스별로 이전을 하자
+
 ![elasticdump](https://raw.github.com/taskrabbit/elasticsearch-dump/master/elasticdump.jpg)
 
 원타임 작업이라서 logstash을 위한 새로운 환경을 구축하기보다는 갱신이 없는 인덱스에 대해서 elasticdump로 인덱스 단위로 이전을 하고, 현재 갱신중인 인덱스에 대해서는 logstash의 output을 신/구 클러스터의 양쪽으로 보내는 것으로 했습니다.
