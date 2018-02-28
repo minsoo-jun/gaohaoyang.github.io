@@ -16,7 +16,6 @@
 
 {% if site.baidu_tongji_id %}
     <script>
-    // 百度统计代码
     var _hmt = _hmt || [];
     (function() {
       var hm = document.createElement("script");
@@ -49,8 +48,14 @@
     }
 });
 </script>
-<script type="text/javascript"
-  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-114909806-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-114909806-1');
+    </script>
+
 {% endif %}
 </head>
