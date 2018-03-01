@@ -19,25 +19,33 @@ Elasticsearch > batch
 ################################################
 # Execution environment define
 ################################################
-# Its depend on Env.: Dev, Stg, Qa, Prod
+#엘라스틱서치 서버의 주소를 지정합니다. 세큐리티가 설치되어있는 경우에는 userid:password@localhost:9200으로 입력합니다.
 TARGET_SERVER="localhost:9200"
-# DevOps Group will be define.
+# 작업할 홈 디렉터리를 지정합니다
 HOME_DIR="/home/logstash"
-# For logging
+# For logging 로그 파일뒤에 날자를 붙이기 위해서
 RUN_DATE=`date +%Y-%m-%d`
-# It will rotate per day
+# It will rotate per day 일별로 로그 파일을 생성
 LOG_FILE="${HOME_DIR}/logs/apache-index-controller.log.$RUN_DATE"
+
 # It temporary file for processing, Its will reset by every running.
+# 각 그룹 이름을 취득해서 일시적으로 저장하기 위한 파일
 APACHE_GROUP_FILE="/${HOME_DIR}/APACHE_GROUP_FILE.txt"
+# 대상 인덱스 리스트를 일시적으로 저장하기 위한 파일
 TARGET_INDEX_FILE="/${HOME_DIR}/TARGET_INDEX_FILE.txt"
+
 # It defines, how many the Indices remain per each Popularity pattern
+# 각 그룹별로 남겨둘 인덱스 수. 이 숫자를 넘어서는 인덱스는 alias에서 제외 시키고 close 함
 MAX_INDEX_NUMBER=46
+
 # It defines, Offset for "close" and "delete" timing
+# MAX_INDEX_NUMBER 에 이 숫자를 더한 값을 넘어서는 인덱스는 delete됨
 MAX_INDEX_NUMBER_CLOSE_OFFSET=1
 
 ################################################
 # Start
 ################################################
+# 로그 파일이 없으면 생성하기 위해서 touch를 사용
 touch $LOG_FILE
 echo "#######################################">>$LOG_FILE
 echo `date '+%Y-%m-%d %H:%M:%S'`":Start">>$LOG_FILE
@@ -47,9 +55,11 @@ echo "#######################################">>$LOG_FILE
 # Get all Indices for make apache group
 ################################################
 #remove old data
-`rm -f $APACHE_GROUP_FILE`
+# 앞 실행해서 사용한 임시 파일을 지우고 다시 만들기 cat /dev/null < $APACHE_GROUP_FILE 하면 되지 외 두개로 나누어서 했을까..
+`rm -f $APACHE_GROUP_FILE` 
 #Create blank file
 `touch $APACHE_GROUP_FILE`
+
 #Get Target Index list : example out : apache-tag apache-access apache-item
 RUN_COMMAND="curl -XGET \"http://${TARGET_SERVER}/_cat/indices/apache*\" 2>/dev/null | /usr/bin/awk '{ print \$3 }' | sort -nr | awk -F \"-\" '{printf \$1\"-\"\$2 \"\n\"}' | uniq"
 echo `eval ${RUN_COMMAND}` >>$APACHE_GROUP_FILE
