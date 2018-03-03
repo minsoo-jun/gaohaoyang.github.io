@@ -64,7 +64,8 @@ $> pwd;find . | sort | sed '1d;s/^\.//;s/\/\([^/]*\)$/|--\1/;s/\/[^/|]*/|  /g'
 |  |  |  |  |--main.yml
 ```
 
-###Inventory file : logplatform
+### Inventory file : logplatform
+
 이번에 대상으로 하는 인벤토리 파일은 "logplatform-servers"입니다.
 파일의 내용은 아래와 같습니다.
 ```yaml
@@ -78,7 +79,7 @@ kibana-servers
 [kibana-servers]
 192.168.56.104 IPV4_ADDR="192.168.56.104"
 ```
-###Debug playbook
+### Debug playbook
 확인용 플레이북으로 정상적으로 서버를 가지고 오는지 확인해 합니다. 
 ```yaml
 - name: Include vars of es-servers
@@ -211,5 +212,7 @@ ok: [192.168.56.104] => {
  
 #end
 ```
-`주의!! when: "'kibana-servers' == target_kibana_server.results[0].item" 에서 when 안에서는 변수를 표현 할 때는 {{ }} 를 쓰지 않는다`
+`<span style="color:red">주의!! when: "'kibana-servers' == target_kibana_server.results[0].item" 에서 when 안에서는 변수를 표현 할 때는 {{ }} 를 쓰지 않는다</span>`
+
+
 `when 에서 비교 할 때는 전체를 " " 로 묶고 안에서 처리해야 된다`
