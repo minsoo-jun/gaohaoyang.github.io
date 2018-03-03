@@ -60,22 +60,28 @@ echo "#######################################">>$LOG_FILE
 #Create blank file
 `touch $APACHE_GROUP_FILE`
 
-#Get Target Index list : example out : apache-tag apache-access apache-item
+# elastcisearch Indices 예
+# apache-access-2018-03-01,apache-access-2018-03-02,apache-access-2018-03-03 그룹과 apache-ref-2018-03-01,apache-ref-2018-03-02,apache-ref-2018-03-03가 있을 경우
+# 1. elasticsearch에서 apache*로 시작되는 인덱스의 리스트를 가지고 와서 "curl -XGET \"http://${TARGET_SERVER}/_cat/indices/apache*\" 2>/dev/null
+# 2-3. 출력문의 3번째 인자인 인덱스 이름만 취득후 소트 (인덱스명은 날자로 끝남) | /usr/bin/awk '{ print \$3 }' | sort -nr
+# 4-5. awk -F \"-\" '{printf \$1\"-\"\$2 \"\n\"}' | uniq "-"로 문자를 구별한 뒤 첫 인수오 두번째 인수를 "-"로 붙임.
+# 변수를 입력한후 스크립트를 실행해야 되기 때문에 일단 문자로 스크립트를 만든후 `eval`로 실행되게 함
 RUN_COMMAND="curl -XGET \"http://${TARGET_SERVER}/_cat/indices/apache*\" 2>/dev/null | /usr/bin/awk '{ print \$3 }' | sort -nr | awk -F \"-\" '{printf \$1\"-\"\$2 \"\n\"}' | uniq"
+#실행 결과를 $APACHE_GROUP_FILE 파일에 저장, 파일내용은 apache-access apache-ref  식으로 한줄로 출력됨
 echo `eval ${RUN_COMMAND}` >>$APACHE_GROUP_FILE
 
-#convert file to Array
+# 파일에 저장한 인덱스 그룹을 배열로 읽어 드림
 TEMP=`cat ${APACHE_GROUP_FILE}`
 INDEX_PATTERN_ARRAY=(${TEMP})
+# 후일 화인을 위해 로그를 남김
 echo "Target PATTERNS:" >> $LOG_FILE
-echo ${INDEX_PATTERN_ARRAY[0]} >> $LOG_FILE
-echo ${INDEX_PATTERN_ARRAY[1]} >> $LOG_FILE
-echo ${INDEX_PATTERN_ARRAY[2]} >> $LOG_FILE
-echo "----------------------------">> $LOG_FILE
 
 ################################################
-# Looping for processing by each Popularity group
+# Looping for processing by each Apache group
+# 위에서 취득한 각 아파치 로그 그룹의 이름으로 그 이름의 패턴의 모든 인덱스를 취득하고
+# 지정한 갯수만 alias로 지정하고, 필요에 때라서 close, delete를 함 
 ################################################
+# 취득한 인덱스 패턴 만큼 루프를 돌림.
 for idx_pattern in "${INDEX_PATTERN_ARRAY[@]}"
 do
   #remove old data
@@ -83,9 +89,11 @@ do
   #Create blank file
   `touch $TARGET_INDEX_FILE`
   #get all indices with fixed prefix(idx_pattern) and sorting
+  # 지정한 그룹명으로 모든 인덱스를 취득해서 소트함
   RUN_COMMAND="curl -XGET \"http://${TARGET_SERVER}/_cat/indices/${idx_pattern}*\" 2>/dev/null | /usr/bin/awk '{ print \$3 }' | sort -nr"
   echo `eval ${RUN_COMMAND}` >> $TARGET_INDEX_FILE
 
+  # 취득한 인덱스를 같은 방법으로 배열로 읽어 드림
   TEMP=`cat ${TARGET_INDEX_FILE}`
   TMP_ARRARY=($TEMP)
   X=1
@@ -94,11 +102,12 @@ do
   ################################################
   for target_index in "${TMP_ARRARY[@]}"
   do
-    #TODO Add Alias
+    # alias에 추가함
     RUN_COMMAND="curl -XPOST \"http://${TARGET_SERVER}/_aliases\" -H 'Content-Type: application/json' -d' { \"actions\" : [{ \"add\" : { \"index\" : \"${target_index}\", \"alias\" : \"${idx_pattern}\" } }]}'"
     status=`eval ${RUN_COMMAND}`
     echo "[Add to aliases] :${idx_pattern} Target Index: ${target_index} Result:${status}" >> $LOG_FILE
     #if exceed MAX_INDEX_NUMBER, its will break
+    # 지정한 숫자를 초과 했을 경우 멈춤
     if [ $MAX_INDEX_NUMBER -eq $X ]
     then
        echo "break due to reach maxt index number:$X" >> $LOG_FILE
@@ -109,6 +118,7 @@ do
 
   ################################################
   # For remove from aliases
+  # 지정한 최대 인덱스 수를 초과 했을 경우 alias에서 제외함
   ################################################
   X=1
   for target_index in "${TMP_ARRARY[@]}"
@@ -124,6 +134,7 @@ do
 
   ################################################
   # For close and delete index over (MAX_INDEX_NUMBER + MAX_INDEX_NUMBER_CLOSE_OFFSET) number.
+  # MAX_INDEX_NUMBER에 MAX_INDEX_NUMBER_CLOSE_OFFSET를 넘어선 index는 close하고 delete함
   ################################################
   # for close index : MAX_INDEX_NUMBER + 1
   X=1
@@ -142,6 +153,7 @@ done
 
 ################################################
 # Done.
+# 완료
 ################################################
 echo "--------------------------------" >>$LOG_FILE
 echo `date '+%Y-%m-%d %H:%M:%S'`":Done" >>$LOG_FILE
