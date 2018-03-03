@@ -37,7 +37,7 @@ APACHE_GROUP_FILE="/${HOME_DIR}/APACHE_GROUP_FILE.txt"
 # 대상 인덱스 리스트를 일시적으로 저장하기 위한 파일
 TARGET_INDEX_FILE="/${HOME_DIR}/TARGET_INDEX_FILE.txt"
 
-# It defines, how many the Indices remain per each Popularity pattern
+# It defines, how many the Indices remain per each index pattern
 # 각 그룹별로 남겨둘 인덱스 수. 이 숫자를 넘어서는 인덱스는 alias에서 제외 시키고 close 함
 MAX_INDEX_NUMBER=46
 
@@ -164,3 +164,6 @@ echo "--------------------------------" >>$LOG_FILE
 echo ""
 exit 0
 ```
+
+### Soruce 보기
+[elasticsearch-indices-delete-batch.sh](https://github.com/minsoo-jun/elasticsearch_tools/blob/master/src/bin/elasticsearch-indices-delete-batch.sh)
