@@ -212,7 +212,7 @@ ok: [192.168.56.104] => {
  
 #end
 ```
-`<span style="color:red">주의!! when: "'kibana-servers' == target_kibana_server.results[0].item" 에서 when 안에서는 변수를 표현 할 때는 {{ }} 를 쓰지 않는다</span>`
+<span style="color:red">`주의!! when: "'kibana-servers' == target_kibana_server.results[0].item" 에서 when 안에서는 변수를 표현 할 때는 {{ }} 를 쓰지 않는다`</span>
 
 
 `when 에서 비교 할 때는 전체를 " " 로 묶고 안에서 처리해야 된다`
