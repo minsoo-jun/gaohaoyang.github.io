@@ -15,6 +15,7 @@ Elasticsearch > batch
 
 ### 검증환경
 | OS | CentOS7 |
+|-------|-------|
 | Shell | /bin/bash |
 | Elasticsearch | 5.6.4 |
 ```
