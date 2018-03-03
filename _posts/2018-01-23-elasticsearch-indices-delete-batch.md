@@ -13,7 +13,10 @@ Elasticsearch > batch
 엘라스틱 서치를 사용하다 보면 정기적으로 인덱스를 삭제하거나 alias를 정기적으로 변경해야 할 경우가 발생합니다.
 아래의 shell script 는 그런 경우에 사용하기 위해서 작성한 것입니다. 
 
-
+### 검증환경
+| OS | CentOS7 |
+| Shell | /bin/bash |
+| Elasticsearch | 5.6.4 |
 ```
 #!/bin/bash
 ################################################
