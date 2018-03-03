@@ -14,10 +14,9 @@ Elasticsearch > batch
 아래의 shell script 는 그런 경우에 사용하기 위해서 작성한 것입니다. 
 
 ### 검증환경
-| OS | CentOS7 |
-|-------|-------|
-| Shell | /bin/bash |
-| Elasticsearch | 5.6.4 |
+OS: CentOS7
+Shell: /bin/bash 
+Elasticsearch:5.6.4 
 ```
 #!/bin/bash
 ################################################
