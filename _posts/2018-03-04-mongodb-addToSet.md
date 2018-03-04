@@ -18,3 +18,8 @@ MongoDB > $addToSet
 
 [Mongodb -> Operators -> update -> addToSet](https://docs.mongodb.com/manual/reference/operator/update/addToSet/)
 
+### 기본 문법
+```javascript
+{ $addToSet: { <field1>: <value1>,....}}
+```
+$addToSet 기능은 배열에 값이 없으면 추가를 같은 값이 있으면 갱신을 하지 않습니다. 즉 hashmap과 비슷한 기능을 하고 있습니다.(머가 비슷하냐;)
