@@ -28,7 +28,7 @@ $addToSet 기능은 배열에 값이 없으면 추가를 같은 값이 있으면
 ### Input data 예제
 ```javascript
 {
-	"labelKey": "label001",
+	"tagKey": "tag001",
 	"popularity": 3010,
 	"specPage": [
 		{"id": "sp1111"},
@@ -47,7 +47,7 @@ $addToSet 기능은 배열에 값이 없으면 추가를 같은 값이 있으면
 }
 
 {
-	"labelKey": "label002",
+	"tagKey": "tag002",
 	"popularity": 356,
 	"specPage": [
 		{"id": "sp1111"},
@@ -65,6 +65,68 @@ $addToSet 기능은 배열에 값이 없으면 추가를 같은 값이 있으면
 	]
 }
 ```
-labelKey값을 기준으로 하나의 JSON 문서로 구성이 되어 있고 
-복수의 카테고리(spechPage, normalPage)의 복수의 페이지(id별로 다른 페이지)에서 labelKey가 사용되고 있다.
-하나의 labelKey에는 여러 언어로 번역이 되어 있습니다.
+tagKey값을 기준으로 하나의 JSON 문서로 구성이 되어 있고 
+복수의 카테고리(spechPage, normalPage)의 복수의 페이지(id별로 다른 페이지)에서 tagKey가 사용되고 있다.
+하나의 tagKey에는 여러 언어로 번역이 되어 있습니다.
+
+출력은 각 페이지 별로 포함되어 있는 "tagKey"로 변환 하는 것입니다.
+```javascript
+{
+	"id": "sp1111",
+	"category": "specPage",
+	"tagKeys":[
+		{
+			"tagKey": "tag001",
+			"labels": [
+				{"en_US": "JSON"},
+				{"ko_KR": "제이슨"},
+				{"ja_JP": "ジェイソン"}
+			]
+		},
+		{
+			"tagKey": "tag002",
+			"labels": [
+				{"en_US": "Array"},
+				{"ko_KR": "배열"},
+				{"ja_JP": "配列"}
+			]
+		}
+	]
+}
+{
+	"id": "sp2222",
+	"category": "specPage",
+	"tagKeys":[
+		{
+			"tagKey": "tag001",
+			"labels": [
+				{"en_US": "JSON"},
+				{"ko_KR": "제이슨"},
+				{"ja_JP": "ジェイソン"}
+			]
+		}
+	]
+}
+{
+	"id": "np1111",
+	"category": "specPage",
+	"tagKeys":[
+		{
+			"tagKey": "tag001",
+			"labels": [
+				{"en_US": "JSON"},
+				{"ko_KR": "제이슨"},
+				{"ja_JP": "ジェイソン"}
+			]
+		},
+		{
+			"tagKey": "tag002",
+			"labels": [
+				{"en_US": "Array"},
+				{"ko_KR": "배열"},
+				{"ja_JP": "配列"}
+			]
+		}
+	]
+}
+```
