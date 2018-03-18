@@ -22,4 +22,49 @@ MongoDB > $addToSet
 ```javascript
 { $addToSet: { <field1>: <value1>,....}}
 ```
-$addToSet 기능은 배열에 값이 없으면 추가를 같은 값이 있으면 갱신을 하지 않습니다. 즉 hashmap과 비슷한 기능을 하고 있습니다.(머가 비슷하냐;)
+$addToSet 기능은 배열에 값이 없으면 추가를 같은 값이 있으면 갱신을 하지 않습니다. 
+즉 hashmap과 비슷한 기능을 하고 있습니다.(머가 비슷하냐;)
+
+### Input data 예제
+```javascript
+{
+	"labelKey": "label001",
+	"popularity": 3010,
+	"specPage": [
+		{"id": "sp1111"},
+		{"id": "sp2222"}
+	],
+	"normalPage": [
+		{"id": "np1111"},
+		{"id": "np2222"},
+		{"id": "np3333"}
+	],
+	"labels": [
+		{"en_US": "JSON"},
+		{"ko_KR": "제이슨"},
+		{"ja_JP": "ジェイソン"}
+	]
+}
+
+{
+	"labelKey": "label002",
+	"popularity": 356,
+	"specPage": [
+		{"id": "sp1111"},
+		{"id": "sp2999"}
+	],
+	"normalPage": [
+		{"id": "np1111"},
+		{"id": "sp2999"},
+		{"id": "np3333"}
+	],
+	"labels": [
+		{"en_US": "Array"},
+		{"ko_KR": "배열"},
+		{"ja_JP": "配列"}
+	]
+}
+```
+labelKey값을 기준으로 하나의 JSON 문서로 구성이 되어 있고 
+복수의 카테고리(spechPage, normalPage)의 복수의 페이지(id별로 다른 페이지)에서 labelKey가 사용되고 있다.
+하나의 labelKey에는 여러 언어로 번역이 되어 있습니다.
